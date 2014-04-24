@@ -5,6 +5,7 @@
     ALL YOUR PARSING NEEDS!
 """
 import json
+from features import FeatureGenerator
 
 
 class DataSet(object):
