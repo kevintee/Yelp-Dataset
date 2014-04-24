@@ -11,3 +11,7 @@ You should have the following installed:
 - `numpy`
 - `textblob`
 - `sklearn` (can be installed through `pip install -U scikit-learn`)
+
+After you install textblob, you need to run the following:
+
+    python -m textblob.download_corpora
