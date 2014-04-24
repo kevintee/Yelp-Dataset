@@ -47,12 +47,16 @@ def create_combined_review_data_set(review_file_name):
 
         feature_vector.append(blob.sentiment.polarity)
         feature_vector.append(blob.sentiment.subjectivity)
+        
+        words = blob.lower().singularize()
+        # TODO: add features of selected word counts
+        #       need to do some processing to figure out which words matter
 
         # Add feature vector to list of feature vectors
         X.append(feature_vector)
     return DataSet(X, y)
 
 if __name__ == '__main__':
-    X = create_combined_review_data_set(
-            'data/yelp_academic_dataset_review_small.json'
+    d = create_combined_review_data_set(
+            'data/yelp_academic_dataset_review.json'
         )
