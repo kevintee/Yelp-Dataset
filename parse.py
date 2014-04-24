@@ -5,7 +5,6 @@
     ALL YOUR PARSING NEEDS!
 """
 import json
-from textblob import TextBlob
 
 
 class DataSet(object):
@@ -29,7 +28,11 @@ def create_combined_review_data_set(review_file_name):
     data = load_json(review_file_name)
     X = []
     y = []
-    for datum in data:
+
+    # Pre-process all features
+    fg = FeatureGenerator(data)
+
+    for idx, datum in enumerate(data):
         # Our labels are the star counts
         y.append(int(datum['stars']))
 
@@ -43,22 +46,36 @@ def create_combined_review_data_set(review_file_name):
         feature_vector.append(int(datum['votes']['useful']))
 
         # TextBlob processing
-        blob = TextBlob(datum['text'])
+        blob = fg.get_blob(idx)
 
-        feature_vector.append(len(blob))
-        feature_vector.append(blob.sentiment.polarity)
-        feature_vector.append(blob.sentiment.subjectivity)
         
         words = blob.words.lower().singularize()
 
         # TODO: add features of selected word counts
         #       need to do some processing to figure out which words matter
+        #
+        #       the feature generation is separated into a separate class
+        #       because some features may need to reference the context of
+        #       the entire dataset before determining it's features
+        #       (e.g. counts of words that are most widespread across all data)
+        #
+        #       feature generation can potentially look up yelp user accounts
+        #       which should be done through the FeatureGenerator class
 
         # Add feature vector to list of feature vectors
+        feature_vector.append(fg.generate_subjectivity(idx))
+        feature_vector.append(fg.generate_polarity(idx))
+        feature_vector.append(fg.generate_length(idx))
+        feature_vector.append(fg.generate_num_sentences(idx))
+        feature_vector.append(fg.generate_avg_sentence_len(idx))
+        feature_vector.append(fg.generate_count_exclamation(idx))
+        feature_vector.append(fg.generate_punctuation_to_sentence_ratio(idx))
+        feature_vector.append(fg.generate_number_of_all_cap_words(idx))
+
         X.append(feature_vector)
     return DataSet(X, y)
 
 if __name__ == '__main__':
     d = create_combined_review_data_set(
-            'data/yelp_academic_dataset_review.json'
+            'data/yelp_academic_dataset_review_small.json'
         )
