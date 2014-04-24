@@ -49,7 +49,8 @@ def create_combined_review_data_set(review_file_name):
         feature_vector.append(blob.sentiment.polarity)
         feature_vector.append(blob.sentiment.subjectivity)
 
-        words = [x.singularize() for x in blob.lower().words]
+
+        words = [x.singularize() for x in blob.lower().split(' ')]
         # TODO: add features of selected word counts
         #       need to do some processing to figure out which words matter
 
