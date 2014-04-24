@@ -50,7 +50,7 @@ def create_combined_review_data_set(review_file_name):
 
         # Add feature vector to list of feature vectors
         X.append(feature_vector)
-    return X
+    return DataSet(X, y)
 
 if __name__ == '__main__':
     X = create_combined_review_data_set(
