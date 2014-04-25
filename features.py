@@ -37,6 +37,6 @@ class FeatureGenerator(object):
     def generate_number_of_all_cap_words(self, idx):
         all_caps_count = 0
         for word in self.blobs[idx].words:
-            if word.upper() == word:
+            if word.upper() == word and len(word) > 1:
                 all_caps_count += 1
         return all_caps_count
