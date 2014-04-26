@@ -49,7 +49,7 @@ def create_combined_review_data_set(review_file_name):
         # TextBlob processing
         blob = fg.get_blob(idx)
 
-        
+
         words = blob.words.lower().singularize()
 
         # TODO: add features of selected word counts
