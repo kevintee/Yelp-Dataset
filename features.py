@@ -45,7 +45,7 @@ class FeatureGenerator(object):
 
     def _get_star_words(self, num_stars):
         words = {}
-        for star, blob in enumerate(stars, blobs):
+        for star, blob in zip(self.stars, self.blobs):
             if star == num_stars:
                 for word in blob.words:
                     if word in words:
