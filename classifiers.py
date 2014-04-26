@@ -21,7 +21,6 @@ def adaboost_classifier(data, labels):
 	clf.fit(data, labels)
 	return clf
 
-
 def predict_using_classifier(classifier, test_data):
 	return classifier.predict(test_data)
 
