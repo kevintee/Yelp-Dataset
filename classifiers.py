@@ -1,5 +1,4 @@
-from sklearn import tree
-from sklearn import ensemble
+from sklearn import tree, ensemble, neighbors, naive_bayes, multiclass, svm, cross_validation, grid_search
 
 def decision_tree_classifier(data, labels):
 	clf = tree.DecisionTreeClassifier()
@@ -20,6 +19,38 @@ def adaboost_classifier(data, labels):
 	clf = ensemble.AdaBoostClassifier()
 	clf.fit(data, labels)
 	return clf
+
+def k_nearest_neighbor_classifier(data, labels):
+	clf = neighbors.KNeighborsClassifier()
+	clf.fit(data, labels)
+	return clf
+
+def gaussian_naive_bayes_classifier(data, labels):
+	clf = naive_bayes.GaussianNB()
+	clf.fit(data, labels)
+	return clf
+
+def one_vs_rest_classifier(data, labels):
+	clf = multiclass.OneVsRestClassifier(svm.LinearSVC())
+	clf.fit(data, labels)
+	return clf
+
+def one_vs_one_classifier(data, labels):
+	clf = multiclass.OneVsOneClassifier(svm.LinearSVC())
+	clf.fit(data, labels)
+	return clf
+
+def cross_validate(classifier, data, labels):
+	scores = cross_validation.cross_val_score(classifier, data, labels, cv=5)
+	return scores
+
+def grid_srch(classifier, data, labels, parameters):
+	clf = grid_search.GridSearchCV(classifier, parameters)
+	clf.fit(data, labels)
+	return clf
+
+def prediction_confidence(classifier, test_data):
+	return classifier.predict_proba(test_data)
 
 def predict_using_classifier(classifier, test_data):
 	return classifier.predict(test_data)
