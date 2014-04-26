@@ -57,5 +57,5 @@ class FeatureGenerator(object):
         words = sorted(words.items(), key=lambda x: x[1])
         words.reverse()
         stop = stopwords.words('english')
-        words = [x for x in words if x[0] not in stop]
+        words = [x for x in words if x[0] not in stop and "'" not in x[0]]
         return words
