@@ -1,3 +1,4 @@
+from nltk.corpus import stopwords
 from textblob import TextBlob
 
 class FeatureGenerator(object):
@@ -48,10 +49,13 @@ class FeatureGenerator(object):
         for star, blob in zip(self.stars, self.blobs):
             if star == num_stars:
                 for word in blob.words:
+                    word = word.lower()
                     if word in words:
                         words[word] += 1
                     else:
                         words[word] = 1
         words = sorted(words.items(), key=lambda x: x[1])
         words.reverse()
+        stop = stopwords.words('english')
+        words = [x for x in words if x[0] not in stop]
         return words
