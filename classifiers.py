@@ -21,14 +21,8 @@ def adaboost_classifier(data, labels):
 	clf.fit(data, labels)
 	return clf
 
-
 def predict_using_classifier(classifier, test_data):
 	return classifier.predict(test_data)
 
 def accuracy(predictions, labels):
-	correct = 0.0
-	for index, prediction in enumerate(predictions):
-		if prediction == labels[index]:
-			correct+=1
-	return correct/len(labels)
-
+    return sklearn.metrics.accuracy_score(predictions, labels)
