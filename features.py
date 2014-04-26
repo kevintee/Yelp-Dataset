@@ -4,9 +4,11 @@ class FeatureGenerator(object):
 
     def __init__(self, data):
         self.blobs = []
+        self.stars = []
         for datum in data:
             blob = TextBlob(datum['text'])
             self.blobs.append(blob)
+            self.stars.append(int(datum['stars']))
 
     def get_blob(self, idx):
         return self.blobs[idx]
@@ -40,3 +42,16 @@ class FeatureGenerator(object):
             if word.upper() == word and len(word) > 1:
                 all_caps_count += 1
         return all_caps_count
+
+    def _get_star_words(self, num_stars):
+        words = {}
+        for star, blob in enumerate(stars, blobs):
+            if star == num_stars:
+                for word in blob.words:
+                    if word in words:
+                        words[word] += 1
+                    else:
+                        words[word] = 1
+        words = sorted(words.items(), key=lambda x: x[1])
+        words.reverse()
+        return words
