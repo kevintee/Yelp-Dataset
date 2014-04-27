@@ -72,6 +72,11 @@ def create_combined_review_data_set(review_file_name):
         feature_vector.append(fg.generate_count_exclamation(idx))
         feature_vector.append(fg.generate_punctuation_to_sentence_ratio(idx))
         feature_vector.append(fg.generate_number_of_all_cap_words(idx))
+        feature_vector.append(fg.generate_similarity_between_words(idx, 1))
+        feature_vector.append(fg.generate_similarity_between_words(idx, 2))
+        feature_vector.append(fg.generate_similarity_between_words(idx, 3))
+        feature_vector.append(fg.generate_similarity_between_words(idx, 4))
+        feature_vector.append(fg.generate_similarity_between_words(idx, 5))
 
         X.append(feature_vector)
     return DataSet(X, y)

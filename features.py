@@ -48,10 +48,11 @@ class FeatureGenerator(object):
     def generate_similarity_between_words(self, idx, num_stars):
         words = self.common_words[num_stars-1]
         score = 0
+        length = len(self.blobs[idx].words)
         for word in self.blobs[idx].words:
             if word in words:
                 score += words[word]
-        return score
+        return float(score) / (length * words.values()[0])
 
     def _get_star_words(self, num_stars):
         words = {}
