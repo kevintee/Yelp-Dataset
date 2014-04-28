@@ -3,17 +3,18 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, Float, Boolean
 
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 
 Base = declarative_base()
-engine = create_engine('sqlite:///' + os.getcwd() + '/data/store.db', echo=True)
+engine = create_engine('sqlite:///' + os.getcwd() + '/data/store.db', echo=False)
 
 
 class Business(Base):
     __tablename__ = 'businesses'
     id = Column(Integer, primary_key=True)
-    bid = Columng(String, unique=True)
+    bid = Column(String, unique=True)
 
     price_range = Column(Integer)
     latitude = Column(Float)
@@ -50,3 +51,9 @@ class Tip(Base):
 
     def __repr__(self):
         return '<Tip bid=%s uid=%s>' % (self.bid, self.uid)
+
+
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+
+session = Session()

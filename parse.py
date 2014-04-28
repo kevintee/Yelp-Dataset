@@ -5,6 +5,8 @@
     ALL YOUR PARSING NEEDS!
 """
 import json
+
+from db import session, User, Business, Tip
 from features import FeatureGenerator
 
 
@@ -20,6 +22,61 @@ def load_json(file_name):
     """
     with open(file_name, 'r') as f:
         return [json.loads(line) for line in f.readlines()]
+
+
+def import_data_to_sql():
+    """
+        YOU SHOULD ONLY RUN THIS ONCE
+    """
+    businesses = load_json('data/yelp_academic_dataset_business.json')
+    for b in businesses:
+        bid = b['business_id']
+        price_range = b['attributes']['Price Range']
+        latitude = b['latitude']
+        longitude = b['longitude']
+        credit_card = b['attributes']['Accepts Credit Cards']
+        session.add(Business(
+            bid=bid,
+            price_range=price_range,
+            latitude=latitude,
+            longitude=longitude,
+            credit_card=credit_card
+        ))
+
+    session.commit()
+
+    tips = load_json('data/yelp_academic_dataset_tip.json')
+    for t in tips:
+        bid = t['business_id']
+        uid = t['user_id']
+        likes = t['likes']
+        session.add(Tip(
+            bid=bid,
+            uid=uid,
+            likes=likes
+        ))
+    session.commit()
+
+    users = load_json('data/yelp_academic_dataset_user.json')
+    for u in users:
+        uid = u['user_id']
+        review_count = u['review_count']
+        num_fans = u['fans']
+        years_elite = len(u['elite'])
+
+        funny = u['votes']['funny']
+        useful = u['votes']['useful']
+        cool = u['votes']['cool']
+        session.add(User(
+            uid=uid,
+            review_count=review_count,
+            num_fans=num_fans,
+            years_elite=years_elite,
+            funny=funny,
+            useful=useful,
+            cool=cool
+        ))
+    session.commit()
 
 
 def create_combined_review_data_set(review_file_name):
