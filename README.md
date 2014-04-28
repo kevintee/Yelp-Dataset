@@ -33,3 +33,4 @@ An example query:
 
     session.query(Tip).filter(Tip.bid == 'U7jOpLoLXYphWFqS6JO8mQ').all()
 
+If you want to change the database schema (add another field or something), you'll also need to re-import the data. Delete `data/store.db` and a new database will be created.
