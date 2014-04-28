@@ -20,6 +20,9 @@ class Business(Base):
     longitude = Column(Float)
     credit_card = Column(Boolean)
 
+    def __repr__(self):
+        return '<Business bid=%s>' % (self.bid, )
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -34,6 +37,9 @@ class User(Base):
     useful = Column(Integer)
     cool = Column(Integer)
 
+    def __repr__(self):
+        return '<User uid=%s>' % (self.uid, )
+
 
 class Tip(Base):
     __tablename__ = 'tips'
@@ -41,3 +47,6 @@ class Tip(Base):
     uid = Column(String)
     bid = Column(String)
     likes = Column(Integer)
+
+    def __repr__(self):
+        return '<Tip bid=%s uid=%s>' % (self.bid, self.uid)
