@@ -28,23 +28,21 @@ def import_data_to_sql():
     """
         YOU SHOULD ONLY RUN THIS ONCE
     """
+    print "Importing businesses..."
     businesses = load_json('data/yelp_academic_dataset_business.json')
     for b in businesses:
         bid = b['business_id']
-        price_range = b['attributes']['Price Range']
         latitude = b['latitude']
         longitude = b['longitude']
-        credit_card = b['attributes']['Accepts Credit Cards']
         session.add(Business(
             bid=bid,
-            price_range=price_range,
             latitude=latitude,
             longitude=longitude,
-            credit_card=credit_card
         ))
-
     session.commit()
+    print "Done."
 
+    print "Importing tips..."
     tips = load_json('data/yelp_academic_dataset_tip.json')
     for t in tips:
         bid = t['business_id']
@@ -56,7 +54,9 @@ def import_data_to_sql():
             likes=likes
         ))
     session.commit()
+    print "Done."
 
+    print "Importing users..."
     users = load_json('data/yelp_academic_dataset_user.json')
     for u in users:
         uid = u['user_id']
@@ -77,6 +77,7 @@ def import_data_to_sql():
             cool=cool
         ))
     session.commit()
+    print "Done."
 
 
 def create_combined_review_data_set(review_file_name):
@@ -139,6 +140,7 @@ def create_combined_review_data_set(review_file_name):
     return DataSet(X, y)
 
 if __name__ == '__main__':
-    d = create_combined_review_data_set(
-            'data/yelp_academic_dataset_review_small.json'
-        )
+    #d = create_combined_review_data_set(
+    #        'data/yelp_academic_dataset_review_small.json'
+    #    )
+    pass
