@@ -1,6 +1,8 @@
 from nltk.corpus import stopwords
 from textblob import TextBlob
 
+from db import session, Tip, Business, User
+
 class FeatureGenerator(object):
 
     def __init__(self, data):
@@ -71,3 +73,12 @@ class FeatureGenerator(object):
         words = [x for x in words if "'" not in x[0]]
         words = words[:50]
         return dict(words)
+
+    def generate_number_of_tips(self, idx, uid, bid):
+        return len(
+            session.query(Tip).filter(
+                Tip.bid == bid
+            ).filter(
+                Tip.uid == uid
+            ).all()
+        )

@@ -19,6 +19,11 @@ After you install textblob, you need to run the following:
 
     python -m textblob.download_corpora
 
+After you install `nltk`, you need to run the following:
+
+    >>> import nltk
+    >>> nltk.download()
+
 ## Database
 We are using SQLite with SqlAlchemy as the ORM.
 
