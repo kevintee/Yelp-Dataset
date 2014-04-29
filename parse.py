@@ -140,6 +140,14 @@ def create_combined_review_data_set(review_file_name):
             fg.generate_number_of_tips(
                 idx, datum['user_id'], datum['business_id'])
         )
+        feature_vector.append(
+            fg.generate_business_latitude(
+                idx, datum['business_id'])
+        )
+        feature_vector.append(
+            fg.generate_business_longitude(
+                idx, datum['business_id'])
+        )
 
         X.append(feature_vector)
     return DataSet(X, y)

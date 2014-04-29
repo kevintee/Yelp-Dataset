@@ -82,3 +82,11 @@ class FeatureGenerator(object):
                 Tip.uid == uid
             ).all()
         )
+
+    def generate_business_latitude(self, idx, bid):
+        business = session.query(Business).filter(Business.bid == bid).first()
+        return float(business.latitude)
+
+    def generate_business_longitude(self, idx, bid):
+        business = session.query(Business).filter(Business.bid == bid).first()
+        return float(business.longitude)
