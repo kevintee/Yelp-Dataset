@@ -1,4 +1,4 @@
-from sklearn import tree, ensemble, neighbors, naive_bayes, multiclass, svm, cross_validation, grid_search
+from sklearn import tree, ensemble, neighbors, naive_bayes, multiclass, svm, cross_validation, grid_search, lda, qda
 
 def decision_tree_classifier(data, labels):
 	clf = tree.DecisionTreeClassifier()
@@ -39,6 +39,16 @@ def one_vs_one_classifier(data, labels):
 	clf = multiclass.OneVsOneClassifier(svm.LinearSVC())
 	clf.fit(data, labels)
 	return clf
+
+def LDA_classifer(data, labels):
+    clf = lda.LDA()
+    clf.fit(data, labels)
+    return clf
+
+def QDA_classifer(data, labels):
+    clf = qda.QDA()
+    clf.fit(data, labels)
+    return clf
 
 def cross_validate(classifier, data, labels):
 	scores = cross_validation.cross_val_score(classifier, data, labels, cv=5)
