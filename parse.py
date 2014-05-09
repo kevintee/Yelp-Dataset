@@ -95,6 +95,8 @@ def create_combined_review_data_set(review_file_name):
         # Our labels are the star counts
         y.append(int(datum['stars']))
 
+        business_id = datum['business_id']
+
         # Our features are everything else we can get our hands on
         feature_vector = []
         # Add as many features as we can think of
@@ -135,18 +137,19 @@ def create_combined_review_data_set(review_file_name):
         feature_vector.append(fg.generate_similarity_between_words(idx, 3))
         feature_vector.append(fg.generate_similarity_between_words(idx, 4))
         feature_vector.append(fg.generate_similarity_between_words(idx, 5))
+        feature_vector.append(fg.generate_average_stars_cluster(idx, business_id))
 
         feature_vector.append(
             fg.generate_number_of_tips(
-                idx, datum['user_id'], datum['business_id'])
+                idx, datum['user_id'], business_id)
         )
         feature_vector.append(
             fg.generate_business_latitude(
-                idx, datum['business_id'])
+                idx, business_id)
         )
         feature_vector.append(
             fg.generate_business_longitude(
-                idx, datum['business_id'])
+                idx, business_id)
         )
 
         X.append(feature_vector)

@@ -1,18 +1,38 @@
 from nltk.corpus import stopwords
+from sklearn.cluster import KMeans
 from textblob import TextBlob
 
 from db import session, Tip, Business, User
 
+NUM_CLUSTERS = 10
+
 class FeatureGenerator(object):
 
     def __init__(self, data):
+        # Generate text and stars
         self.blobs = []
         self.stars = []
+        self.business_stars = {}
         for datum in data:
             blob = TextBlob(datum['text'])
             self.blobs.append(blob)
             self.stars.append(int(datum['stars']))
+            self.business_stars[datum['business_id']] = int(datum['stars'])
+
+        # Generate common words
         self.common_words = [self._get_star_words(x) for x in range(1, 6)]
+
+        # Generate business coordinates
+        self.business_coordinates = {}
+        businesses = session.query(Business).all()
+        for business in businesses:
+            if business.bid in self.business_stars:
+                latitude = float(business.latitude)
+                longitude = float(business.longitude)
+                self.business_coordinates[business.bid] = (latitude, longitude)
+        self.average_value = [0]*NUM_CLUSTERS
+        self.clustering = None
+        self._clustering_businesses()
 
     def get_blob(self, idx):
         return self.blobs[idx]
@@ -84,9 +104,25 @@ class FeatureGenerator(object):
         )
 
     def generate_business_latitude(self, idx, bid):
-        business = session.query(Business).filter(Business.bid == bid).first()
-        return float(business.latitude)
+        return self.business_coordinates[bid][0]
 
     def generate_business_longitude(self, idx, bid):
-        business = session.query(Business).filter(Business.bid == bid).first()
-        return float(business.longitude)
+        return self.business_coordinates[bid][1]
+
+    def _clustering_businesses(self):
+        self.clustering = KMeans(n_clusters=NUM_CLUSTERS)
+        predict = self.clustering.fit_predict(self.business_coordinates.values())
+        business_ids = self.business_coordinates.keys()
+        num_businesses = [0]*NUM_CLUSTERS
+        total_stars = [0]*NUM_CLUSTERS
+        for i,p in enumerate(predict):
+            if business_ids[i] in self.business_stars:
+                total_stars[p] += self.business_stars[business_ids[i]]
+                num_businesses[p] += 1
+        self.average_value = [float(x) / y if y > 0 else 0 for x,y in
+                zip(total_stars, num_businesses)]
+
+    def generate_average_stars_cluster(self, idx, bid):
+        prediction = self.clustering.predict(self.business_coordinates[bid])[0]
+        return self.average_value[prediction]
+
