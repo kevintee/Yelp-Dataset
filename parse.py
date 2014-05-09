@@ -138,6 +138,7 @@ def create_combined_review_data_set(review_file_name):
         feature_vector.append(fg.generate_similarity_between_words(idx, 4))
         feature_vector.append(fg.generate_similarity_between_words(idx, 5))
         feature_vector.append(fg.generate_average_stars_cluster(idx, business_id))
+        feature_vector.append(fg.generate_num_businesses_in_area(idx, business_id))
 
         feature_vector.append(
             fg.generate_number_of_tips(

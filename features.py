@@ -30,8 +30,9 @@ class FeatureGenerator(object):
                 latitude = float(business.latitude)
                 longitude = float(business.longitude)
                 self.business_coordinates[business.bid] = (latitude, longitude)
+        self.clustering = KMeans(n_clusters=NUM_CLUSTERS)
         self.average_value = [0]*NUM_CLUSTERS
-        self.clustering = None
+        self.num_businesses = [0]*NUM_CLUSTERS
         self._clustering_businesses()
 
     def get_blob(self, idx):
@@ -110,19 +111,21 @@ class FeatureGenerator(object):
         return self.business_coordinates[bid][1]
 
     def _clustering_businesses(self):
-        self.clustering = KMeans(n_clusters=NUM_CLUSTERS)
+        total_stars = [0]*NUM_CLUSTERS
         predict = self.clustering.fit_predict(self.business_coordinates.values())
         business_ids = self.business_coordinates.keys()
-        num_businesses = [0]*NUM_CLUSTERS
-        total_stars = [0]*NUM_CLUSTERS
         for i,p in enumerate(predict):
             if business_ids[i] in self.business_stars:
                 total_stars[p] += self.business_stars[business_ids[i]]
-                num_businesses[p] += 1
+                self.num_businesses[p] += 1
         self.average_value = [float(x) / y if y > 0 else 0 for x,y in
-                zip(total_stars, num_businesses)]
+                zip(total_stars, self.num_businesses)]
 
     def generate_average_stars_cluster(self, idx, bid):
         prediction = self.clustering.predict(self.business_coordinates[bid])[0]
         return self.average_value[prediction]
+
+    def generate_num_businesses_in_area(self, idx, bid):
+        prediction = self.clustering.predict(self.business_coordinates[bid])[0]
+        return self.num_businesses[prediction]
 
