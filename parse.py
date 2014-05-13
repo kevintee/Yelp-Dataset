@@ -5,15 +5,27 @@
     ALL YOUR PARSING NEEDS!
 """
 import json
+import cPickle as pickle
 
 from db import session, User, Business, Tip
 from features import FeatureGenerator
 
 
 class DataSet(object):
+
     def __init__(self, X, y):
         self.x = X
         self.y = y
+
+    def save(self, file_name):
+        pickle.dump(self, open(file_name, 'wb'))
+
+    @staticmethod
+    def load(file_name):
+        try:
+            return pickle.load(open(file_name, 'rb'))
+        except:
+            return None
 
 
 def load_json(file_name):
@@ -156,8 +168,8 @@ def create_combined_review_data_set(review_file_name):
         X.append(feature_vector)
     return DataSet(X, y)
 
+
 if __name__ == '__main__':
-    #d = create_combined_review_data_set(
-    #        'data/yelp_academic_dataset_review_small.json'
-    #    )
-    pass
+    d = create_combined_review_data_set(
+            'data/yelp_academic_dataset_review_small.json'
+        )
